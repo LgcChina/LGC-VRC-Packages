@@ -1,27 +1,21 @@
 {
-    "name":"LGC Listing",
-    "id":"com.lgc.listing",
-    "url":"https://github.com/LgcChina/LGC-VRC-packages/index.json",
-    "author":{
-        "email":"none",
-        "name":"LgcChina",
-        "url":"https://github.com/LgcChina"
-    },
-    "description":"我在学习做一些包发布",
-    "infoLink":{
-        "url":"http://github.com/vrchat-community/template-package-listing",
-        "text":"View on GitHub"
-    },
-    "bannerUrl":"banner.png",
-    "githubRepos":[
-        "LgcChina/tools"
-    ],
-    "packages":[
-        {
-            "name":"com.lgc.renametool",
-            "releases":[
-                "https://github.com/LgcChina/tools/releases/download/v1.0.0/LGCSuffixTool.zip",
-            ]
-        }
-    ]
+  "name": "LGC VRC Packages",
+  "id": "com.lgcchina.vrc-packages",
+  "author": "LgcChina",
+  "description": "LgcChina的AI苦力包发布页",
+
+  "url": "https://lgcchina.github.io/LGC-VRC-packages/index.json",
+
+  "infoLink": {
+    "url": "https://github.com/LgcChina/LGC-VRC-packages"
+  },
+
+  "githubRepos": [
+
+  ],
+
+  "packages": [
+
+  ]
 }
+``
