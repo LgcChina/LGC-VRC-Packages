@@ -1,8 +1,10 @@
 {
   "name": "LGC VRC Packages",
   "id": "com.lgcchina.vrc-packages",
-  "author": "LgcChina",
-  "description": "LgcChina的AI苦力包发布页",
+  "author": {
+    "name": "LgcChina"
+  },
+  "description": "LgcChina's VRChat VPM Package Listing",
 
   "url": "https://lgcchina.github.io/LGC-VRC-packages/index.json",
 
@@ -10,13 +12,7 @@
     "url": "https://github.com/LgcChina/LGC-VRC-packages"
   },
 
-
-"githubRepos": [
-  "LgcChina/VRCPickupQuickSetup"
-]
-,
-
-  "packages": [
-
+  "githubRepos": [
+    "LgcChina/VRCPickupQuickSetup"
   ]
 }
