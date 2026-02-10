@@ -10,9 +10,11 @@
     "url": "https://github.com/LgcChina/LGC-VRC-packages"
   },
 
-  "githubRepos": [
-  "LgcChina/VRCPickupQuickSetup
-  ],
+
+"githubRepos": [
+  "LgcChina/VRCPickupQuickSetup"
+]
+,
 
   "packages": [
 
