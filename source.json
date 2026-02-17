@@ -5,14 +5,12 @@
     "name": "LgcChina"
   },
   "description": "LgcChina's VRChat VPM Package Listing",
-
   "url": "https://lgcchina.github.io/LGC-VRC-packages/index.json",
-
   "infoLink": {
     "url": "https://github.com/LgcChina/LGC-VRC-packages"
   },
-
   "githubRepos": [
-    "LgcChina/VRCPickupQuickSetup"
+    "LgcChina/VRCPickupQuickSetup",
+    "LgcChina/BlendShapeCapReducer"
   ]
 }
