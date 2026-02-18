@@ -185,42 +185,35 @@ h1 {
   box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.3);
 }
 
+/* 强化VCC URL输入框的文字样式（黑色） */
 .vccUrlField {
-  min-width: 450px;
-  max-width: 90%;
-  flex-grow: 1;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: var(--glass-backdrop);
-  color: var(--text-primary);
-  padding: 12px 15px;
-  border-radius: 8px;
+  color: #000000 !important; /* 强制黑色文字 */
+  caret-color: #000000; /* 光标也设为黑色 */
 }
 
+/* 强制覆盖fluent-text-field组件内部的文字颜色（黑色） */
+fluent-text-field::part(root) {
+  color: #000000 !important;
+}
+fluent-text-field::part(control) {
+  color: #000000 !important;
+  background: transparent !important;
+}
+fluent-text-field::part(input) {
+  color: #000000 !important;
+}
+
+/* 强化按钮文字和图标对比度（黑色） */
 fluent-button {
-  background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-  color: dark;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  color: #000000 !important; /* 强制按钮文字黑色 */
+  --neutral-foreground-rest: #000000 !important;
+  --accent-foreground-rest: #000000 !important;
+}
+/* 确保按钮内SVG图标继承黑色 */
+fluent-button svg path {
+  fill: #000000 !important;
 }
 
-fluent-button:hover {
-  background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
-  transform: translateY(-2px);
-}
-
-fluent-button[appearance="accent"] {
-  background: var(--primary-accent);
-}
-
-fluent-button[appearance="accent"]:hover {
-  background: var(--primary-accent-hover);
-  transform: translateY(-2px);
-}
 
 #addListingToVccHelp {
   z-index: 11;
@@ -577,7 +570,7 @@ fluent-tooltip {
         <div class="caption1 mb-2" id="publishedByText">Published by <a href="{{listingInfo.Author.Url}}" target="_blank">{{ listingInfo.Author.Name }}</a></div>
         {{~ if listingInfo.InfoLink.Url ~}}
           <div class="caption1" id="publishedByText">
-            <a href="{{listingInfo.InfoLink.Url}}" target="_blank">{{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; "Lean More"; end; }}</a>
+            <a href="{{listingInfo.InfoLink.Url}}" target="_blank">{{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; "Learn More"; end; }}</a>
           </div>
         {{~ end; ~}}
       </div>
@@ -760,7 +753,7 @@ fluent-tooltip {
     </fluent-card>
     {{~ if listingInfo.InfoLink.Url ~}}
       <div class="caption1" id="publishedByText">
-        <a href="{{listingInfo.InfoLink.Url}}" target="_blank">{{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; "Lean More"; end; }}</a>
+        <a href="{{listingInfo.InfoLink.Url}}" target="_blank">{{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; "Learn More"; end; }}</a>
       </div>
     {{~ end; ~}}
   </div>
@@ -888,9 +881,9 @@ fluent-tooltip {
             const downloadListener = () => {
               window.open(e?.target?.dataset?.packageUrl, '_blank');
             }
-            downloadLink.addEventListener('change', () => {
+            downloadLink.addEventListener('click', () => {
               downloadListener();
-              downloadLink.removeEventListener('change', downloadListener);
+              downloadLink.removeEventListener('click', downloadListener);
             });
 
             setTimeout(() => {
@@ -961,4 +954,52 @@ fluent-tooltip {
           } else {
             packageInfoLicense.parentElement.classList.remove('hidden');
             packageInfoLicense.textContent = packageInfo.license ?? 'See License';
-            packageInfoLicense.href = packageInfo.licensesUrl ?? '#';
+            packageInfoLicense.href = packageInfo.licensesUrl ?? '#'; 
+          }
+
+          // Clear and populate dependencies list
+          packageInfoDependencies.innerHTML = null;
+          for (const [depName, depVersion] of Object.entries(packageInfo.dependencies)) {
+            const li = document.createElement('li');
+            li.textContent = `${depName} @ ${depVersion}`;
+            packageInfoDependencies.appendChild(li);
+          }
+
+          // Set the listing URL in the modal
+          document.getElementById('packageInfoVccUrlField').value = LISTING_URL;
+
+          // Show the modal
+          packageInfoModal.hidden = false;
+        });
+      });
+
+      const packageInfoVccUrlFieldCopy = document.getElementById('packageInfoVccUrlFieldCopy');
+      packageInfoVccUrlFieldCopy.addEventListener('click', () => {
+        const vccUrlField = document.getElementById('packageInfoVccUrlField');
+        vccUrlField.select();
+        navigator.clipboard.writeText(vccUrlField.value);
+        packageInfoVccUrlFieldCopy.appearance = 'accent';
+        setTimeout(() => {
+          packageInfoVccUrlFieldCopy.appearance = 'neutral';
+        }, 1000);
+      });
+
+      const packageInfoListingHelp = document.getElementById('packageInfoListingHelp');
+      const packageInfoListingTooltip = document.getElementById('packageInfoListingTooltip');
+      packageInfoListingHelp.addEventListener('click', () => {
+        addListingToVccHelp.hidden = false;
+        packageInfoModal.hidden = true;
+      });
+
+      // Close modals when clicking outside
+      document.addEventListener('click', (e) => {
+        if (packageInfoModal.hidden === false && 
+            !packageInfoModal.contains(e.target) && 
+            !packageInfoListingHelp.contains(e.target)) {
+          packageInfoModal.hidden = true;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
