@@ -1,53 +1,28 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VCC Listing</title>
   <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* 仅新增中英切换按钮样式，不覆盖原styles.css */
-    .lang-switch {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 999;
-      display: flex;
-      gap: 8px;
-    }
-    .lang-switch fluent-button {
-      border-radius: 4px;
-      transition: all 0.2s ease;
-    }
-    .lang-switch fluent-button:hover {
-      background-color: var(--neutral-fill-hover);
-    }
-    /* 轻量优化原样式，不影响核心布局 */
-    fluent-data-grid-row:not([row-type="header"]):hover {
-      background-color: var(--neutral-fill-hover);
-      cursor: pointer;
-    }
-    .bannerImage {
-      border-radius: 8px;
-    }
-  </style>
 </head>
 <body>
-  <!-- 新增中英切换按钮，悬浮固定，不影响原布局 -->
-  <div class="lang-switch">
-    <fluent-button id="langCn" appearance="accent">中文</fluent-button>
-    <fluent-button id="langEn" appearance="outline">English</fluent-button>
-  </div>
-
   <div class="col align-items-center content">
     <div id="listingInfo" class="col mb-4 w-100 align-items-center">
       {{~ if listingInfo.BannerImage; ~}}
         <div class="bannerImage" style="background-image: url({{ listingInfo.BannerImageUrl }})"></div>
       {{~ end; ~}}
-      <h1>
-        {{~ listingInfo.Name ~}}
-      </h1>
+      
+      <!-- 标题行 + 语言切换按钮 -->
+      <div class="row align-items-center justify-content-between w-100">
+        <h1 class="m-0">{{ listingInfo.Name }}</h1>
+        <div class="row">
+          <fluent-button id="langZh" appearance="accent">中</fluent-button>
+          <fluent-button id="langEn" class="ms-2">EN</fluent-button>
+        </div>
+      </div>
+
       {{~ if listingInfo.Description; ~}}
         <div class="caption1 mb-2">{{ listingInfo.Description }}</div>
       {{~ end; ~}}
@@ -58,38 +33,39 @@
         </fluent-tooltip>
         {{~ end; ~}}
         <div class="caption1 mb-2" id="publishedByText">
-          <span data-lang="publishedBy">由</span> 
-          <a href="{{listingInfo.Author.Url}}" target="_blank">{{ listingInfo.Author.Name }}</a>
-          <span data-lang="publish">发布</span>
+          <span data-i18n="publishedBy">发布者</span> <a href="{{listingInfo.Author.Url}}" target="_blank">{{ listingInfo.Author.Name }}</a>
         </div>
         {{~ if listingInfo.InfoLink.Url ~}}
           <div class="caption1" id="publishedByText">
-            <a href="{{listingInfo.InfoLink.Url}}" target="_blank">{{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; "Learn More"; end; }}</a>
+            <a href="{{listingInfo.InfoLink.Url}}" target="_blank">
+              {{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; }}<span data-i18n="learnMore">了解更多</span>{{ end; }}
+            </a>
           </div>
         {{~ end; ~}}
       </div>
     </div>
+
     <div class="addToVccBlock mt-4 row align-items-center">
       <fluent-text-field aria-readonly="true" id="vccUrlField" class="vccUrlField" readonly value="{{ listingInfo.Url }}">
       </fluent-text-field>
-      <fluent-button appearance="accent" class="ms-2" id="vccAddRepoButton" >
-        <span data-lang="addToVcc">添加到VCC</span>
+      <fluent-button appearance="accent" class="ms-2" id="vccAddRepoButton">
+        <span data-i18n="addToVcc">添加到 VCC</span>
       </fluent-button>
       <fluent-button class="ms-2" id="vccUrlFieldCopy">
         <svg slot="start" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path d="M8 2C6.89543 2 6 2.89543 6 4V14C6 15.1046 6.89543 16 8 16H14C15.1046 16 16 15.1046 16 14V4C16 2.89543 15.1046 2 14 2H8ZM7 4C7 3.44772 7.44772 3 8 3H14C14.5523 3 15 3.44772 15 4V14C15 14.5523 14.5523 15 14 15H8C7.44772 15 7 14.5523 7 14V4ZM4 6.00001C4 5.25973 4.4022 4.61339 5 4.26758V14.5C5 15.8807 6.11929 17 7.5 17H13.7324C13.3866 17.5978 12.7403 18 12 18H7.5C5.567 18 4 16.433 4 14.5V6.00001Z"/>
         </svg>
-        <span data-lang="copy">复制</span>
+        <span data-i18n="copy">复制</span>
       </fluent-button>
-      <fluent-tooltip id="urlBarHelpTooltip" anchor="urlBarHelp">
-        <span data-lang="howToAddTip">如何将列表添加到你的VCC</span>
-      </fluent-tooltip>
+      <fluent-tooltip id="urlBarHelpTooltip" anchor="urlBarHelp" data-i18n="urlBarHelpTooltip">如何将列表添加到 VCC</fluent-tooltip>
       <fluent-button id="urlBarHelp" appearance="stealth" class="ms-2">
         <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 4V16C4 17.1046 4.89543 18 6 18H15.5C15.7761 18 16 17.7761 16 17.5C16 17.2239 15.7761 17 15.5 17H6C5.44772 17 5 16.5523 5 16H15C15.5523 16 16 15.5523 16 15V4C16 2.89543 15.1046 2 14 2H6C4.89543 2 4 2.89543 4 4ZM14 3C14.5523 3 15 3.44772 15 4V15H5V4C5 3.44772 5.44772 3 6 3H14ZM8.76069 6.40877C8.95015 6.21142 9.31074 6 10 6C10.6893 6 11.0499 6.21142 11.2393 6.40877C11.4409 6.61877 11.5 6.86546 11.5 7C11.5 7.4539 11.2301 7.69835 10.7773 7.92363C10.6657 7.97916 10.552 8.02883 10.4343 8.0797L10.4116 8.08953C10.3056 8.13534 10.1902 8.18521 10.088 8.23655C9.98257 8.28953 9.85193 8.36283 9.7433 8.46505C9.62799 8.57355 9.5 8.75189 9.5 9V9.99999C9.5 10.2761 9.72386 10.5 10 10.5C10.2761 10.5 10.5 10.2753 10.5 9.99918V9.1493C10.5111 9.14333 10.5234 9.13694 10.537 9.13009C10.6125 9.09217 10.703 9.05302 10.8197 9.00257L10.8313 8.99753C10.948 8.94704 11.0843 8.8878 11.2227 8.81894C11.7699 8.5467 12.5 8.0461 12.5 7C12.5 6.63454 12.3591 6.13123 11.9607 5.71623C11.5501 5.28858 10.9107 5 10 5C9.08926 5 8.44985 5.28858 8.03931 5.71623C7.64091 6.13123 7.5 6.63454 7.5 7C7.5 7.27614 7.72386 7.5 8 7.5C8.27614 7.5 8.5 7.27614 8.5 7C8.5 6.86546 8.55909 6.61877 8.76069 6.40877ZM10 13C10.4142 13 10.75 12.6642 10.75 12.25C10.75 11.8358 10.4142 11.5 10 11.5C9.58579 11.5 9.25 11.8358 9.25 12.25C9.25 12.6642 9.58579 13 10 13Z" />
         </svg>
       </fluent-button>
     </div>
+
+    <!-- 帮助对话框 -->
     <fluent-dialog id="addListingToVccHelp" hidden modal>
       <div class="col ps-4 pe-4">
         <div class="row align-items-center justify-content-between mt-3 mb-4">
@@ -97,7 +73,7 @@
             <svg class="me-2" style="fill: var(--neutral-foreground-rest)" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 4V16C4 17.1046 4.89543 18 6 18H15.5C15.7761 18 16 17.7761 16 17.5C16 17.2239 15.7761 17 15.5 17H6C5.44772 17 5 16.5523 5 16H15C15.5523 16 16 15.5523 16 15V4C16 2.89543 15.1046 2 14 2H6C4.89543 2 4 2.89543 4 4ZM14 3C14.5523 3 15 3.44772 15 4V15H5V4C5 3.44772 5.44772 3 6 3H14ZM8.76069 6.40877C8.95015 6.21142 9.31074 6 10 6C10.6893 6 11.0499 6.21142 11.2393 6.40877C11.4409 6.61877 11.5 6.86546 11.5 7C11.5 7.4539 11.2301 7.69835 10.7773 7.92363C10.6657 7.97916 10.552 8.02883 10.4343 8.0797L10.4116 8.08953C10.3056 8.13534 10.1902 8.18521 10.088 8.23655C9.98257 8.28953 9.85193 8.36283 9.7433 8.46505C9.62799 8.57355 9.5 8.75189 9.5 9V9.99999C9.5 10.2761 9.72386 10.5 10 10.5C10.2761 10.5 10.5 10.2753 10.5 9.99918V9.1493C10.5111 9.14333 10.5234 9.13694 10.537 9.13009C10.6125 9.09217 10.703 9.05302 10.8197 9.00257L10.8313 8.99753C10.948 8.94704 11.0843 8.8878 11.2227 8.81894C11.7699 8.5467 12.5 8.0461 12.5 7C12.5 6.63454 12.3591 6.13123 11.9607 5.71623C11.5501 5.28858 10.9107 5 10 5C9.08926 5 8.44985 5.28858 8.03931 5.71623C7.64091 6.13123 7.5 6.63454 7.5 7C7.5 7.27614 7.72386 7.5 8 7.5C8.27614 7.5 8.5 7.27614 8.5 7C8.5 6.86546 8.55909 6.61877 8.76069 6.40877ZM10 13C10.4142 13 10.75 12.6642 10.75 12.25C10.75 11.8358 10.4142 11.5 10 11.5C9.58579 11.5 9.25 11.8358 9.25 12.25C9.25 12.6642 9.58579 13 10 13Z" />
             </svg>
-            <h3 class="m-0" data-lang="howToAddTitle">如何将此列表添加到你的VCC</h3> 
+            <h3 class="m-0" data-i18n="howToAddListing">如何将此列表添加到 VCC</h3> 
           </div>
           <fluent-button appearance="stealth" id="addListingToVccHelpClose">
             <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -105,19 +81,17 @@
               </svg>
           </fluent-button>
         </div>
-        <p class="mb-1" data-lang="howToAddDesc">
-          要将此列表添加到你的VCC（VRChat Creator Companion），请执行以下操作
-        </p>
+        <p class="mb-1" data-i18n="howToAddDesc">要将此列表添加到您的 VCC（VRChat Creator Companion），请执行以下操作：</p>
         <ul class="mt-1 ps-5">
-          <li class="mb-2" data-lang="step1">打开你的VCC并进入设置页面</li>
-          <li class="mb-2" data-lang="step2">点击「Packages」（包）标签页</li>
-          <li class="mb-2" data-lang="step3">点击「Add Repository」（添加仓库）</li>
-          <li class="mb-2" data-lang="step4">在弹出的输入框中，粘贴下方显示的链接</li>
-          <li class="mb-2" data-lang="step5">点击「Add」（添加）</li>
-          <li class="mb-2" data-lang="step6">核对仓库信息并点击「I Understand」（我已知晓）</li>
-          <li class="mb-2" data-lang="step7">进入你的任意项目，即可查看新添加列表中的包</li>
+          <li class="mb-2" data-i18n="step1">打开 VCC 并转到设置</li>
+          <li class="mb-2" data-i18n="step2">点击“包”选项卡</li>
+          <li class="mb-2" data-i18n="step3">点击“添加仓库”</li>
+          <li class="mb-2" data-i18n="step4">在出现的字段中 - 粘贴下面显示的网址</li>
+          <li class="mb-2" data-i18n="step5">点击“添加”</li>
+          <li class="mb-2" data-i18n="step6">检查仓库信息并点击“我了解”</li>
+          <li class="mb-2" data-i18n="step7">转到您的任何项目，查看新添加列表中的包。</li>
         </ul>
-        <h5 class="m-0 mb-2" data-lang="listingUrl">列表链接</h5>
+        <h5 class="m-0 mb-2" data-i18n="listingUrl">列表网址</h5>
         <div class="row align-items-center">
           <fluent-text-field aria-readonly="true" id="vccListingInfoUrlField" class="vccUrlField" readonly value="{{ listingInfo.Url }}">
           </fluent-text-field>
@@ -125,25 +99,26 @@
             <svg slot="start" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 2C6.89543 2 6 2.89543 6 4V14C6 15.1046 6.89543 16 8 16H14C15.1046 16 16 15.1046 16 14V4C16 2.89543 15.1046 2 14 2H8ZM7 4C7 3.44772 7.44772 3 8 3H14C14.5523 3 15 3.44772 15 4V14C15 14.5523 14.5523 15 14 15H8C7.44772 15 7 14.5523 7 14V4ZM4 6.00001C4 5.25973 4.4022 4.61339 5 4.26758V14.5C5 15.8807 6.11929 17 7.5 17H13.7324C13.3866 17.5978 12.7403 18 12 18H7.5C5.567 18 4 16.433 4 14.5V6.00001Z"/>
             </svg>
-            <span data-lang="copy">复制</span>
+            <span data-i18n="copy">复制</span>
           </fluent-button>
         </div>
-        <div class="caption1 mt-4" data-lang="moreAboutDoc">
-          你可以在<a href="https://vcc.docs.vrchat.com" target="_blank">VCC官方文档</a>中了解更多关于包列表的信息
-        </div>
+        <div class="caption1 mt-4" data-i18n="docsLinkText">您可以在 <a href="https://vcc.docs.vrchat.com" target="_blank">VCC 文档</a> 上阅读更多关于包列表的信息</div>
       </div>
     </fluent-dialog>
+
     <div class="searchBlock">
-      <fluent-text-field id="searchInput" placeholder="搜索包..." type="text" autoFocus data-lang-placeholder="searchPackage"></fluent-text-field>
+      <fluent-text-field id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="搜索包..." type="text" autoFocus></fluent-text-field>
     </div>
+
     <fluent-menu id="rowMoreMenu" hidden>
       <fluent-menu-item id="rowMoreMenuDownload">
         <svg slot="start" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.5 16.9997C15.7761 16.9997 16 17.2236 16 17.4997C16 17.7452 15.8231 17.9494 15.5899 17.9917L15.5 17.9997H4.5C4.22386 17.9997 4 17.7759 4 17.4997C4 17.2543 4.17688 17.0501 4.41012 17.0078L4.5 16.9997H15.5ZM10.0001 2.00195C10.2456 2.00195 10.4497 2.17896 10.492 2.41222L10.5 2.5021L10.496 14.296L14.1414 10.6476C14.3148 10.4739 14.5842 10.4544 14.7792 10.5892L14.8485 10.647C15.0222 10.8204 15.0418 11.0898 14.907 11.2848L14.8492 11.3541L10.3574 15.8541C10.285 15.9267 10.1957 15.9724 10.1021 15.9911L9.99608 16.0008C9.83511 16.0008 9.69192 15.9247 9.60051 15.8065L5.14386 11.3547C4.94846 11.1595 4.94823 10.8429 5.14336 10.6475C5.3168 10.4739 5.58621 10.4544 5.78117 10.5892L5.85046 10.647L9.496 14.288L9.5 2.50181C9.50008 2.22567 9.724 2.00195 10.0001 2.00195Z" />
         </svg>
-        <div data-lang="downloadZip">下载 .ZIP</div>
+        <div data-i18n="downloadZip">下载 .ZIP</div>
       </fluent-menu-item>
     </fluent-menu>
+
     <fluent-dialog id="packageInfoModal" hidden modal>
       <div class="col ps-4 pe-4">
         <div class="row align-items-center justify-content-between mt-3 mb-4">
@@ -160,31 +135,25 @@
               </svg>
           </fluent-button>
         </div>
-        <h5 class="m-0" data-lang="packageInfo">包信息</h5>
-        <p class="mb-4 mt-1" id="packageInfoDescription">
-          Package Description
-        </p>
-        <h5 class="m-0" data-lang="author">作者</h5>
+        <h5 class="m-0" data-i18n="packageInfo">包信息</h5>
+        <p class="mb-4 mt-1" id="packageInfoDescription">Package Description</p>
+        <h5 class="m-0" data-i18n="author">作者</h5>
         <p class="mb-4 mt-1">
-          <a href="#" target="_blank" id="packageInfoAuthor">
-            Author Name
-          </a>
+          <a href="#" target="_blank" id="packageInfoAuthor">Author Name</a>
         </p>
-        <h5 class="m-0 mb-2" data-lang="dependencies">依赖项</h5>
+        <h5 class="m-0 mb-2" data-i18n="dependencies">依赖项</h5>
         <ul class="mt-1 ps-5" id="packageInfoDependencies">
         </ul>
         <div class="col">
-          <h5 class="m-0 mb-2" data-lang="keywords">关键词</h5>
+          <h5 class="m-0 mb-2" data-i18n="keywords">关键词</h5>
           <div class="mb-2 mt-1 row" id="packageInfoKeywords">
           </div>
         </div>
         <div class="col">
-          <h5 class="m-0" data-lang="license">许可证</h5>
-          <a href="#" class="mb-4 mt-1" id="packageInfoLicense">
-            License
-          </a>
+          <h5 class="m-0" data-i18n="license">许可证</h5>
+          <a href="#" class="mb-4 mt-1" id="packageInfoLicense">License</a>
         </div>
-        <h5 class="m-0 mb-2" data-lang="listingUrl">列表链接</h5>
+        <h5 class="m-0 mb-2" data-i18n="listingUrl">列表网址</h5>
         <div class="row align-items-center">
           <fluent-text-field aria-readonly="true" id="packageInfoVccUrlField" class="vccUrlField" readonly value="{{ listingInfo.Url }}">
           </fluent-text-field>
@@ -192,33 +161,25 @@
             <svg slot="start" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 2C6.89543 2 6 2.89543 6 4V14C6 15.1046 6.89543 16 8 16H14C15.1046 16 16 15.1046 16 14V4C16 2.89543 15.1046 2 14 2H8ZM7 4C7 3.44772 7.44772 3 8 3H14C14.5523 3 15 3.44772 15 4V14C15 14.5523 14.5523 15 14 15H8C7.44772 15 7 14.5523 7 14V4ZM4 6.00001C4 5.25973 4.4022 4.61339 5 4.26758V14.5C5 15.8807 6.11929 17 7.5 17H13.7324C13.3866 17.5978 12.7403 18 12 18H7.5C5.567 18 4 16.433 4 14.5V6.00001Z"/>
             </svg>
-            <span data-lang="copy">复制</span>
+            <span data-i18n="copy">复制</span>
           </fluent-button>
-          <fluent-tooltip id="packageInfoListingTooltip" anchor="packageInfoListingHelp">
-            <span data-lang="howToAddTip">如何将列表添加到你的VCC</span>
-          </fluent-tooltip>
+          <fluent-tooltip id="packageInfoListingTooltip" anchor="packageInfoListingHelp" data-i18n="urlBarHelpTooltip">如何将列表添加到 VCC</fluent-tooltip>
           <fluent-button id="packageInfoListingHelp" class="ms-2">
             <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 4V16C4 17.1046 4.89543 18 6 18H15.5C15.7761 18 16 17.7761 16 17.5C16 17.2239 15.7761 17 15.5 17H6C5.44772 17 5 16.5523 5 16H15C15.5523 16 16 15.5523 16 15V4C16 2.89543 15.1046 2 14 2H6C4.89543 2 4 2.89543 4 4ZM14 3C14.5523 3 15 3.44772 15 4V15H5V4C5 3.44772 5.44772 3 6 3H14ZM8.76069 6.40877C8.95015 6.21142 9.31074 6 10 6C10.6893 6 11.0499 6.21142 11.2393 6.40877C11.4409 6.61877 11.5 6.86546 11.5 7C11.5 7.4539 11.2301 7.69835 10.7773 7.92363C10.6657 7.97916 10.552 8.02883 10.4343 8.0797L10.4116 8.08953C10.3056 8.13534 10.1902 8.18521 10.088 8.23655C9.98257 8.28953 9.85193 8.36283 9.7433 8.46505C9.62799 8.57355 9.5 8.75189 9.5 9V9.99999C9.5 10.2761 9.72386 10.5 10 10.5C10.2761 10.5 10.5 10.2753 10.5 9.99918V9.1493C10.5111 9.14333 10.5234 9.13694 10.537 9.13009C10.6125 9.09217 10.703 9.05302 10.8197 9.00257L10.8313 8.99753C10.948 8.94704 11.0843 8.8878 11.2227 8.81894C11.7699 8.5467 12.5 8.0461 12.5 7C12.5 6.63454 12.3591 6.13123 11.9607 5.71623C11.5501 5.28858 10.9107 5 10 5C9.08926 5 8.44985 5.28858 8.03931 5.71623C7.64091 6.13123 7.5 6.63454 7.5 7C7.5 7.27614 7.72386 7.5 8 7.5C8.27614 7.5 8.5 7.27614 8.5 7C8.5 6.86546 8.55909 6.61877 8.76069 6.40877ZM10 13C10.4142 13 10.75 12.6642 10.75 12.25C10.75 11.8358 10.4142 11.5 10 11.5C9.58579 11.5 9.25 11.8358 9.25 12.25C9.25 12.6642 9.58579 13 10 13Z" />
             </svg>
           </fluent-button>
         </div>
-        <div class="caption1 mt-4" data-lang="moreAboutDoc">
-          你可以在<a href="https://vcc.docs.vrchat.com" target="_blank">VCC官方文档</a>中了解更多关于包列表的信息
-        </div>
+        <div class="caption1 mt-4" data-i18n="docsLinkText">您可以在 <a href="https://vcc.docs.vrchat.com" target="_blank">VCC 文档</a> 上阅读更多关于包列表的信息</div>
       </div>
     </fluent-dialog>
+
     <fluent-card class="packages">
       <fluent-data-grid id="packageGrid" role="grid" grid-template-columns="1fr 100px 220px">
         <fluent-data-grid-row row-type="header">
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="1" data-lang="nameCol">
-            名称
-          </fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="2" data-lang="typeCol">
-            类型
-          </fluent-data-grid-cell>
-          <fluent-data-grid-cell cell-type="columnheader" grid-column="3">
-          </fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="1" data-i18n="gridHeaderName">名称</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="2" data-i18n="gridHeaderType">类型</fluent-data-grid-cell>
+          <fluent-data-grid-cell cell-type="columnheader" grid-column="3"></fluent-data-grid-cell>
         </fluent-data-grid-row>
         {{~ for package in packages ~}}
           <fluent-data-grid-row data-package-name="{{ package.DisplayName }}" data-package-id="{{ package.Name }}">
@@ -234,7 +195,7 @@
             </fluent-data-grid-cell>
             <fluent-data-grid-cell grid-column="3" class="row align-items-center justify-content-end">
               <fluent-button appearance="accent" class="rowAddToVccButton" data-package-id="{{ package.Name }}">
-                <span data-lang="addToVcc">添加到VCC</span>
+                <span data-i18n="addToVcc">添加到 VCC</span>
               </fluent-button>
               <fluent-button title="Package Info" class="rowPackageInfoButton ms-2" data-package-id="{{ package.Name }}">
                 <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -253,7 +214,9 @@
     </fluent-card>
     {{~ if listingInfo.InfoLink.Url ~}}
       <div class="caption1" id="publishedByText">
-        <a href="{{listingInfo.InfoLink.Url}}" target="_blank">{{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; "Learn More"; end; }}</a>
+        <a href="{{listingInfo.InfoLink.Url}}" target="_blank">
+          {{ if listingInfo.InfoLink.Text; listingInfo.InfoLink.Text; else; }}<span data-i18n="learnMore">了解更多</span>{{ end; }}
+        </a>
       </div>
     {{~ end; ~}}
   </div>
