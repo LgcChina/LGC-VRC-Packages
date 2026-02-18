@@ -12,6 +12,53 @@
   --card-bg: rgba(30, 30, 45, 0.6);
 }
 
+
+/* 适配页面中所有文本链接（如Learn More、作者名称等） */
+a {
+  /* 使用页面主色调，替换默认蓝色，和Add to VCC按钮视觉统一 */
+  color: #6a8cff; /* 比主色调稍浅，在深色背景下更易读 */
+  text-decoration: none; /* 去掉默认下划线 */
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* 鼠标悬浮效果：文字变深+底部渐变下划线，更贴合玻璃拟态风格 */
+a:hover {
+  color: var(--primary-accent-hover); /* #3a5ce5 */
+  text-decoration: none; /* 避免默认下划线的生硬感 */
+}
+
+/* 可选：添加精致的底部下划线动效（替代默认下划线） */
+a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(to right, #4a6cf7, #6a8cff);
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%; /* hover时下划线从左到右展开 */
+}
+
+/* 重置链接访问后颜色（避免变成紫色） */
+a:visited {
+  color: #6a8cff;
+}
+
+/* 链接聚焦/点击时的样式（提升可访问性） */
+a:focus, a:active {
+  color: var(--primary-accent);
+  outline: none;
+}
+
+
+
+
+
 * {
   box-sizing: border-box;
 }
@@ -130,42 +177,35 @@ h1 {
   box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.3);
 }
 
+/* 强化VCC URL输入框的文字样式（黑色） */
 .vccUrlField {
-  min-width: 450px;
-  max-width: 90%;
-  flex-grow: 1;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: var(--glass-backdrop);
-  color: var(--text-primary);
-  padding: 12px 15px;
-  border-radius: 8px;
+  color: #000000 !important; /* 强制黑色文字 */
+  caret-color: #000000; /* 光标也设为黑色 */
 }
 
+/* 强制覆盖fluent-text-field组件内部的文字颜色（黑色） */
+fluent-text-field::part(root) {
+  color: #000000 !important;
+}
+fluent-text-field::part(control) {
+  color: #000000 !important;
+  background: transparent !important;
+}
+fluent-text-field::part(input) {
+  color: #000000 !important;
+}
+
+/* 强化按钮文字和图标对比度（黑色） */
 fluent-button {
-  background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-  color: white;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  color: #000000 !important; /* 强制按钮文字黑色 */
+  --neutral-foreground-rest: #000000 !important;
+  --accent-foreground-rest: #000000 !important;
+}
+/* 确保按钮内SVG图标继承黑色 */
+fluent-button svg path {
+  fill: #000000 !important;
 }
 
-fluent-button:hover {
-  background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
-  transform: translateY(-2px);
-}
-
-fluent-button[appearance="accent"] {
-  background: var(--primary-accent);
-}
-
-fluent-button[appearance="accent"]:hover {
-  background: var(--primary-accent-hover);
-  transform: translateY(-2px);
-}
 
 #addListingToVccHelp {
   z-index: 11;
