@@ -1,14 +1,18 @@
 {
   "name": "LGC VRC Packages",
   "id": "com.lgcchina.vrc-packages",
-  "author": {
-    "name": "LgcChina"
-  },
   "description": "LgcChina's VRChat VPM Package Listing",
+  "author": {
+    "name": "LgcChina",
+    "url": "https://github.com/LgcChina"
+  },
+
   "url": "https://lgcchina.github.io/LGC-VRC-packages/index.json",
   "infoLink": {
-    "url": "https://github.com/LgcChina/LGC-VRC-packages"
+    "url": "https://github.com/LgcChina/LGC-VRC-packages",
+    "text": "View on GitHub"
   },
+  "bannerUrl": "banner.png",
   "githubRepos": [
     "LgcChina/VRCPickupQuickSetup",
     "LgcChina/BlendShapeCapReducer",
