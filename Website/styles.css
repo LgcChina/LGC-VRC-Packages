@@ -13,6 +13,35 @@
   --dialog-z-index: 9999;
 }
 
+/* ========== Package Info Modal 内部文字样式 ========== */
+#packageInfoModal .col,
+#packageInfoModal h3,
+#packageInfoModal h5,
+#packageInfoModal p,
+#packageInfoModal ul,
+#packageInfoModal li,
+#packageInfoModal .caption1,
+#packageInfoModal a {
+  color: var(--text-primary) !important;
+}
+
+#packageInfoModal h3 {
+  font-size: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  text-align: left !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#packageInfoModal ul {
+  line-height: 1.8 !important;
+  margin: 1rem 0 !important;
+}
+
+#packageInfoModal .caption1 {
+  text-align: left !important;
+  margin-top: 1rem !important;
+}
+
 /* 针对“下载.ZIP”菜单项，强制文字为白色 */
 #rowMoreMenuDownload,
 #rowMoreMenuDownload div {
