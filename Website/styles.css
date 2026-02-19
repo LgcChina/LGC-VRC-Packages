@@ -13,6 +13,17 @@
   --dialog-z-index: 9999;
 }
 
+/* 针对“下载.ZIP”菜单项，强制文字为白色 */
+#rowMoreMenuDownload,
+#rowMoreMenuDownload div {
+    color: white !important;
+}
+
+/* 如果你也想让旁边的下载图标变成白色，可以加上这行 */
+#rowMoreMenuDownload svg {
+    fill: white !important;
+}
+
 /* 链接样式 */
 a {
   color: #6a8cff;
