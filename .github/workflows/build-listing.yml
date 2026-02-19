@@ -1,15 +1,15 @@
 name: Build Repo Listing
 
 on: 
-  workflow_dispatch:  # 保留手动触发功能
+  workflow_dispatch:  # 保留手动触发
   push:
-    branches: main     # 仅main分支触发
-    # 核心修改：数组形式包含所有需要监控的文件
+    branches: main
+    # 核心修正：路径匹配Website目录下的文件 + 根目录的source.json
     paths: 
-      - source.json
-      - styles.css
-      - app.js
-      - index.html
+      - source.json                # 根目录的source.json
+      - Website/styles.css         # Website下的CSS
+      - Website/app.js             # Website下的JS
+      - Website/index.html         # Website下的HTML
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -36,12 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-      - uses: actions/checkout@v4 # 检出当前仓库（包含上述4个文件）
+      - uses: actions/checkout@v4 # 检出当前仓库
       - uses: actions/checkout@v4 # 检出自动化工具仓库
         with:
           repository: vrchat-community/package-list-action
           path: ${{env.pathToCi}}
-          clean: false # 保留当前仓库的文件，避免source.json等被清空
+          clean: false # 保留当前仓库文件，避免source.json被清空
           
       - name: Restore Cache
         uses: actions/cache@v4
