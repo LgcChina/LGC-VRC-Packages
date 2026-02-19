@@ -50,7 +50,8 @@ const getElementByIdSafe = (id) => {
   return el;
 };
 
-(() => {
+// ========== 关键修改1：确保DOM完全加载后执行逻辑 ==========
+document.addEventListener('DOMContentLoaded', () => {
   // 初始化主题
   setTheme();
 
@@ -103,25 +104,39 @@ const getElementByIdSafe = (id) => {
     });
   }
 
-  // ========== 弹窗核心逻辑（增强版） ==========
+  // ========== 关键修改2：修复urlBarHelp按钮点击逻辑（增强稳定性） ==========
   if (urlBarHelpButton && addListingToVccHelp) {
-    // 触发弹窗（URL栏帮助按钮）
-    urlBarHelpButton.addEventListener('click', () => {
+    // 移除原有事件绑定（避免重复），重新绑定
+    urlBarHelpButton.removeEventListener('click', () => {});
+    urlBarHelpButton.addEventListener('click', (e) => {
+      // 阻止事件冒泡，避免被其他逻辑拦截
+      e.stopPropagation();
+      console.log('[VCC UI] 点击了urlBarHelp按钮，尝试打开弹窗');
+      // 强制设置hidden为false（覆盖可能的样式/属性异常）
       addListingToVccHelp.hidden = false;
+      // 强制显示弹窗（兼容Fluent UI组件）
+      addListingToVccHelp.style.display = 'block';
+      // 聚焦弹窗，确保可见
+      addListingToVccHelp.focus();
     });
   }
 
+  // ========== 弹窗核心逻辑（增强版） ==========
   if (addListingToVccHelpClose && addListingToVccHelp) {
     // 关闭弹窗（按钮）
-    addListingToVccHelpClose.addEventListener('click', () => {
+    addListingToVccHelpClose.addEventListener('click', (e) => {
+      e.stopPropagation();
       addListingToVccHelp.hidden = true;
+      addListingToVccHelp.style.display = 'none';
     });
   }
 
   if (packageInfoListingHelp && addListingToVccHelp) {
     // 触发弹窗（包详情页帮助按钮）
-    packageInfoListingHelp.addEventListener('click', () => {
+    packageInfoListingHelp.addEventListener('click', (e) => {
+      e.stopPropagation();
       addListingToVccHelp.hidden = false;
+      addListingToVccHelp.style.display = 'block';
     });
   }
 
@@ -132,6 +147,7 @@ const getElementByIdSafe = (id) => {
       // 点击的是遮罩层（非内容区）才关闭
       if (dialogContent && !dialogContent.contains(e.target)) {
         addListingToVccHelp.hidden = true;
+        addListingToVccHelp.style.display = 'none';
       }
     });
 
@@ -139,6 +155,7 @@ const getElementByIdSafe = (id) => {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !addListingToVccHelp.hidden) {
         addListingToVccHelp.hidden = true;
+        addListingToVccHelp.style.display = 'none';
       }
     });
 
@@ -358,4 +375,4 @@ const getElementByIdSafe = (id) => {
       }, 1000);
     });
   }
-})();
+});
