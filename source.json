@@ -16,6 +16,7 @@
   "githubRepos": [
     "LgcChina/VRCPickupQuickSetup",
     "LgcChina/BlendShapeCapReducer",
-     "LgcChina/FixSkinnedMeshTool" 
+    "LgcChina/FixSkinnedMeshTool",
+    "LgcChina/VRC_TRenameTool"
   ]
 }
