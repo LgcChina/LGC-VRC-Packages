@@ -65,7 +65,13 @@ const cleanDuplicateDialog = () => {
     // 保留第一个，删除其余重复元素
     Array.from(allDialogs).slice(1).forEach(el => el.remove());
   }
-  return document.querySelector('fluent-dialog[id="addListingToVccHelp"]');
+  const dialog = document.querySelector('fluent-dialog[id="addListingToVccHelp"]');
+  // 初始化时强制隐藏弹窗（兜底）
+  if (dialog) {
+    dialog.setAttribute('hidden', '');
+    dialog.style.display = 'none';
+  }
+  return dialog;
 };
 
 /**
@@ -99,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const packageGrid = getElementByIdSafe('packageGrid');
   const searchInput = getElementByIdSafe('searchInput');
   const urlBarHelpButton = getElementByIdSafe('urlBarHelp');
-  const addListingToVccHelp = cleanDuplicateDialog(); // 关键：清理重复弹窗
+  const addListingToVccHelp = cleanDuplicateDialog(); // 关键：清理重复弹窗+初始隐藏
   const addListingToVccHelpClose = getElementByIdSafe('addListingToVccHelpClose');
   const vccListingInfoUrlFieldCopy = getElementByIdSafe('vccListingInfoUrlFieldCopy');
   const vccAddRepoButton = getElementByIdSafe('vccAddRepoButton');
@@ -118,33 +124,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   const packageInfoVccUrlFieldCopy = getElementByIdSafe('packageInfoVccUrlFieldCopy');
   const packageInfoListingHelp = getElementByIdSafe('packageInfoListingHelp');
 
-  // 4. 弹窗显示/隐藏通用方法（终极修复：调用组件原生API）
+  // 4. 弹窗显示/隐藏通用方法（修复版：增加多重兜底）
   /**
-   * 显示添加仓库帮助弹窗（使用Fluent UI组件原生show()方法）
+   * 显示添加仓库帮助弹窗
    */
   const showAddListingHelpDialog = () => {
     if (!addListingToVccHelp) {
       console.error('[VCC UI] 未找到addListingToVccHelp弹窗元素');
       return;
     }
-    // 关键：调用Fluent UI dialog的原生show()方法
+    // 1. 调用组件原生show方法
     addListingToVccHelp.show();
-    // 移除所有手动设置的style，还原到原版状态
-    addListingToVccHelp.removeAttribute('style');
-    // 移除hidden属性（兜底）
+    // 2. 移除hidden属性
     addListingToVccHelp.removeAttribute('hidden');
-    console.log('[VCC UI] 调用组件show()方法，弹窗已激活');
+    // 3. 强制设置display（兜底）
+    addListingToVccHelp.style.display = 'block';
+    // 4. 禁止页面滚动
+    document.body.style.overflow = 'hidden';
+    console.log('[VCC UI] 帮助弹窗已显示');
   };
 
   /**
-   * 隐藏添加仓库帮助弹窗（使用Fluent UI组件原生hide()方法）
+   * 隐藏添加仓库帮助弹窗（多重兜底）
    */
   const hideAddListingHelpDialog = () => {
     if (!addListingToVccHelp) return;
-    // 关键：调用Fluent UI dialog的原生hide()方法
-    addListingToVccHelp.hide();
-    // 添加hidden属性（兜底）
+    // 1. 优先调用组件原生hide方法
+    if (addListingToVccHelp.hide) {
+      addListingToVccHelp.hide();
+    }
+    // 2. 强制添加hidden属性
     addListingToVccHelp.setAttribute('hidden', '');
+    // 3. 强制设置display为none
+    addListingToVccHelp.style.display = 'none';
+    // 4. 恢复页面滚动
+    document.body.style.overflow = '';
+    console.log('[VCC UI] 帮助弹窗已关闭');
   };
 
   // 5. 包搜索功能
@@ -168,21 +183,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // 6. 帮助弹窗控制（终极修复：调用组件API）
+  // 6. 帮助弹窗控制（强化版）
   // 点击urlBarHelp按钮打开弹窗
   if (urlBarHelpButton && addListingToVccHelp) {
     urlBarHelpButton.addEventListener('click', (e) => {
-      e.stopPropagation(); // 阻止事件冒泡
-      e.preventDefault(); // 阻止默认行为
+      e.stopPropagation();
+      e.preventDefault();
       showAddListingHelpDialog();
     });
   }
 
-  // 点击关闭按钮隐藏弹窗
+  // 点击关闭按钮隐藏弹窗（增加事件委托）
   if (addListingToVccHelpClose && addListingToVccHelp) {
     addListingToVccHelpClose.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
       hideAddListingHelpDialog();
+    });
+    // 兜底：给弹窗内所有关闭按钮绑定
+    addListingToVccHelp.addEventListener('click', (e) => {
+      if (e.target.closest('[id*="Close"]')) {
+        hideAddListingHelpDialog();
+      }
     });
   }
 
@@ -190,11 +212,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (packageInfoListingHelp && addListingToVccHelp) {
     packageInfoListingHelp.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
       showAddListingHelpDialog();
     });
   }
 
-  // 点击遮罩层关闭弹窗（适配组件API）
+  // 点击遮罩层关闭弹窗
   if (addListingToVccHelp) {
     addListingToVccHelp.addEventListener('click', (e) => {
       const dialogContent = addListingToVccHelp.shadowRoot?.querySelector('.control');
@@ -204,26 +227,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    // ESC键关闭弹窗（适配组件API）
+    // ESC键关闭弹窗
     window.addEventListener('keydown', (e) => {
-      // 组件的open属性为true表示弹窗显示
       if (e.key === 'Escape' && addListingToVccHelp.open) {
         hideAddListingHelpDialog();
       }
     });
 
-    // 弹窗显示时禁止页面滚动（基于组件open属性）
-    const originalBodyStyle = document.body.style.overflow;
+    // 监听弹窗open属性变化，确保状态同步
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'open') {
-          document.body.style.overflow = addListingToVccHelp.open 
-            ? 'hidden' 
-            : originalBodyStyle;
+          if (!addListingToVccHelp.open) {
+            hideAddListingHelpDialog(); // 同步隐藏状态
+          }
         }
       });
     });
-    // 监听组件的open属性（Fluent UI dialog的核心状态属性）
     observer.observe(addListingToVccHelp, { attributes: true, attributeFilter: ['open'] });
   }
 
@@ -295,11 +315,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (downloadLink) {
         const downloadListener = () => {
           window.open(e?.target?.dataset?.packageUrl, '_blank');
+          rowMoreMenu.hidden = true;
         };
-        downloadLink.addEventListener('change', () => {
-          downloadListener();
-          downloadLink.removeEventListener('change', downloadListener);
-        });
+        downloadLink.addEventListener('click', downloadListener);
       }
 
       setTimeout(() => {
@@ -308,13 +326,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  // 11. 包详情弹窗关闭功能（适配组件API）
+  // 11. 包详情弹窗关闭功能
   if (packageInfoModalClose && packageInfoModal) {
     packageInfoModalClose.addEventListener('click', () => {
       if (packageInfoModal.hide) {
-        packageInfoModal.hide(); // 调用组件hide方法
+        packageInfoModal.hide();
       } else {
-        packageInfoModal.hidden = true; // 兜底
+        packageInfoModal.hidden = true;
+        packageInfoModal.style.display = 'none';
+      }
+      document.body.style.overflow = '';
+    });
+
+    // ESC键关闭包详情弹窗
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && packageInfoModal.open) {
+        packageInfoModal.hide();
+        document.body.style.overflow = '';
+      }
+    });
+
+    // 点击遮罩层关闭包详情弹窗
+    packageInfoModal.addEventListener('click', (e) => {
+      const dialogContent = packageInfoModal.shadowRoot?.querySelector('.control');
+      if (dialogContent && !dialogContent.contains(e.target)) {
+        packageInfoModal.hide();
+        document.body.style.overflow = '';
       }
     });
   }
@@ -325,7 +362,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (modalControl) {
       modalControl.style.maxHeight = "90%";
       modalControl.style.transition = 'height 0.2s ease-in-out';
-      modalControl.style.overflowY = 'hidden';
+      modalControl.style.overflowY = 'auto';
     }
   }
 
@@ -341,7 +378,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const rowPackageInfoButton = document.querySelectorAll('.rowPackageInfoButton');
   rowPackageInfoButton.forEach((button) => {
     button.addEventListener('click', e => {
-      const packageId = e.target.dataset?.packageId;
+      const packageId = e.target.dataset?.packageId || e.currentTarget.dataset.packageId;
       const packageInfo = PACKAGES?.[packageId];
       
       if (!packageInfo) {
@@ -402,13 +439,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       }
 
-      // 显示包详情弹窗（调用组件API）
+      // 显示包详情弹窗
       if (packageInfoModal) {
         if (packageInfoModal.show) {
-          packageInfoModal.show(); // 调用组件show方法
+          packageInfoModal.show();
         } else {
-          packageInfoModal.hidden = false; // 兜底
+          packageInfoModal.hidden = false;
+          packageInfoModal.style.display = 'block';
         }
+        document.body.style.overflow = 'hidden';
+        
         setTimeout(() => {
           const modalControl = packageInfoModal.shadowRoot?.querySelector('.control');
           const colElement = packageInfoModal.querySelector('.col');
