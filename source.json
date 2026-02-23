@@ -17,6 +17,7 @@
     "LgcChina/VRCPickupQuickSetup",
     "LgcChina/BlendShapeCapReducer",
     "LgcChina/FixSkinnedMeshTool",
-    "LgcChina/VRC_TRenameTool"
+    "LgcChina/VRC_TRenameTool",
+    "LgcChina/lgc-material-transfer-tool"
   ]
 }
