@@ -19,6 +19,7 @@
     "LgcChina/FixSkinnedMeshTool",
     "LgcChina/VRC_TRenameTool",
     "LgcChina/lgc-material-transfer-tool",
-    "LgcChina/ActionAnimatorBuilderMA"
+    "LgcChina/ActionAnimatorBuilderMA",
+    "LgcChina/AnimationConverterWindow"
   ]
 }
