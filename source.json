@@ -21,6 +21,7 @@
     "LgcChina/lgc-material-transfer-tool",
     "LgcChina/ActionAnimatorBuilderMA",
     "LgcChina/AnimationConverterWindow",
-    "LgcChina/MeshUVPainter"
+    "LgcChina/MeshUVPainter",
+    "LgcChina/BiliSongListTool"
   ]
 }
