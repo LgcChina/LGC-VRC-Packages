@@ -22,6 +22,7 @@
     "LgcChina/ActionAnimatorBuilderMA",
     "LgcChina/AnimationConverterWindow",
     "LgcChina/MeshUVPainter",
-    "LgcChina/BiliSongListTool"
+    "LgcChina/BiliSongListTool",
+    "LgcChina/LgcWorldTeleportTool"
   ]
 }
