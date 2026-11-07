@@ -24,6 +24,7 @@
     "LgcChina/MeshUVPainter",
     "LgcChina/BiliSongListTool",
     "LgcChina/LgcWorldTeleportTool",
-    "LgcChina/DisableChildAnimatorTool"
+    "LgcChina/DisableChildAnimatorTool",
+    "LgcChina/Mochies-Unity-Shaders"
   ]
 }
