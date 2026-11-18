@@ -1,3 +1,7 @@
+# Mesh UV Painter 3.0 beta
+
+2026-11-18：合集收录网格 UV 绘画工具 `3.0.0-beta.1` 预发布。现有 `source.json` 已包含 `LgcChina/MeshUVPainter`，发布后重新构建在线索引即可获取。VCC/ALCOM 中如未显示，请启用预发布包；稳定版仍可选择 2.7.0。完整功能、安装与注意事项见工具仓库 README 和 CHANGELOG。
+
 # VPM Package Listing Template
 
 Starter for making your own Package Listings, including automation for building and publishing them.
