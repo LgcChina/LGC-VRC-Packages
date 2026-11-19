@@ -1,3 +1,7 @@
+# LGC_MA_Fury_Localization 2.0.0
+
+2026-11-19：合集更新 [LGC_MA_Fury_Localization](https://github.com/LgcChina/LGC_MA_Fury_Localization) **2.0.0**，正式合并 MA 与 VRCFury 汉化，自动检测插件并独立提供启用、还原及 JSON 词典重载。包 ID 为 `com.lgcchina.ma-fury-localization`，窗口入口为 Unity 顶部 `LGC > LGC_MA_Fury_Localization v2.0.0`。旧 1.0.0 发行版停止提供；安装或升级前请备份自定义词典；完整安装说明与兼容范围见工具仓库 README。订阅地址继续使用 https://lgcchina.github.io/LGC-VRC-Packages/index.json 。
+
 # LGC MA 简体中文扩展 1.0.0
 
 2026-11-19：合集新增 [LGC MA 简体中文扩展](https://github.com/LgcChina/LGC-MA-Localization) **1.0.0** 正式版，包 ID 为 `com.lgcchina.ma-localization-probe`。为 Modular Avatar 提供独立简体中文界面，支持停用恢复原版显示与 JSON 词典重载；最低适配目标 MA 1.10.0，按可选接口独立跳过。Unity 入口为顶部 `LGC > MA 汉化 v1.0.0`。安装方式、依赖与限制见工具仓库 README；订阅地址继续使用 https://lgcchina.github.io/LGC-VRC-Packages/index.json 。
