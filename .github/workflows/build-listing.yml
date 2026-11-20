@@ -1,4 +1,4 @@
-# LGC VPM listing workflow revision 1.0.0 — 2026-11-19
+# LGC VPM listing workflow revision 1.0.1 — 2026-11-21
 name: Build Repo Listing
 
 on: 
@@ -16,6 +16,7 @@ on:
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
   
@@ -32,9 +33,8 @@ jobs:
   
   build-listing:
     name: build-listing
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
     runs-on: ubuntu-latest
     steps:
       
@@ -69,8 +69,38 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{env.listPublishDirectory}}
-          
+
+  deploy:
+    name: deploy-pages
+    needs: build-listing
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Pages artifact metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_ARTIFACT: ${{ needs.build-listing.outputs.artifact_name }}
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            if artifact_id="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts?per_page=100" --jq ".artifacts[] | select(.name == \"$EXPECTED_ARTIFACT\" and .expired == false) | .id")"; then
+              if [[ "$artifact_id" =~ ^[0-9]+$ ]]; then
+                echo "Pages artifact metadata is ready: $artifact_id"
+                exit 0
+              fi
+            fi
+            echo "Waiting for Pages artifact metadata ($attempt/12)"
+            sleep 5
+          done
+          echo "::error::The uploaded Pages artifact is not visible in this workflow run."
+          exit 1
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ${{ needs.build-listing.outputs.artifact_name }}

@@ -1,3 +1,7 @@
+## 合集发布工作流 1.0.1
+
+生成与 Pages 部署使用独立任务；产物按运行和尝试编号命名，部署前确认元数据就绪。若部署失败，只需重跑失败的部署任务，避免重复上传同名产物。订阅地址保持不变。
+
 ## LGC_VRCMAFury_中文拓展 2.3.6
 
 订阅地址：https://lgcchina.github.io/LGC-VRC-Packages/index.json 。在 VCC / ALCOM 刷新订阅即可获取 2.3.6。
