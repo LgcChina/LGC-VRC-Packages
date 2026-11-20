@@ -1,5 +1,13 @@
 # 包合集修改日志
 
+## 2026-11-21 — LGC_VRCMAFury_中文拓展 2.3.6
+
+- 展示名称由 LGC_MAFury_中文拓展 更新为 LGC_VRCMAFury_中文拓展，正式收录 SDK 登录 / 上传 / 设置、常用组件与人物描述器汉化，以及 MA / VRCFury 补译。
+- 包 ID 保持 com.lgcchina.ma-fury-localization，来源仍为 LgcChina/LGC_MA_Fury_Localization；已安装 2.0.0 的用户可直接更新，无需更换订阅或卸载旧包。
+- 安装：VCC / ALCOM 刷新 https://lgcchina.github.io/LGC-VRC-Packages/index.json，更新至 2.3.6；Unity 入口为 LGC > LGC_VRCMAFury_中文拓展 v2.3.6。
+- 更新前另存自定义包内词典。程序集、配置键、GUID 与运行资源名称保持稳定；原版第三方工具文件不变。
+- Release 发布后手动触发现有 Build Repo Listing，生成索引并部署 Pages；核对新旧版本收录及新包下载地址和 SHA-256。
+
 ## 2026-11-19 — LGC_MAFury_中文拓展 2.0.0
 
 - 将汉化工具来源仓库更新为 `LgcChina/LGC_MA_Fury_Localization`，收录 MA 与 VRCFury 合并正式版 2.0.0；撤回首次发行后，以中文展示名重新发布相同版本号。
