@@ -1,13 +1,3 @@
-## 合集发布工作流 1.0.1
-
-生成与 Pages 部署使用独立任务；产物按运行和尝试编号命名，部署前确认元数据就绪。若部署失败，只需重跑失败的部署任务，避免重复上传同名产物。订阅地址保持不变。
-
-## LGC_VRCMAFury_中文拓展 2.3.6
-
-订阅地址：https://lgcchina.github.io/LGC-VRC-Packages/index.json 。在 VCC / ALCOM 刷新订阅即可获取 2.3.6。
-
-工具展示名称增加 VRC，包 ID 继续使用 `com.lgcchina.ma-fury-localization`，来源仓库仍为 `LgcChina/LGC_MA_Fury_Localization`。已安装 2.0.0 可直接更新。新版包含 MA、VRCFury 与 VRChat SDK 的已适配界面；Unity 入口为 **LGC > LGC_VRCMAFury_中文拓展 v2.3.6**。更新前请另存自定义包内词典。
-
 # VPM Package Listing Template
 
 Starter for making your own Package Listings, including automation for building and publishing them.
